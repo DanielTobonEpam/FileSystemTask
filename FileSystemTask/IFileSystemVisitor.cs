@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace FileSystemTask
 {
-    public interface IFileSystem
+    public interface IFilesystemVisitor
     {
-
+        string RootDirectory { get; set; }
+        IEnumerable<FileSystemInfo> Traverse();
     }
 }
