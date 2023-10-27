@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "FileSystemTask": {
+      "commandName": "Project",
+      "commandLineArgs": "C:\\Users\\Daniel_Tobon\\Documents\\NET-Mentoring-program"
+    }
+  }
+}
