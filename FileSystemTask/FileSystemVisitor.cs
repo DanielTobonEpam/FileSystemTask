@@ -14,7 +14,7 @@ namespace FileSystemTask
         public event EventHandler<string> DirectoryFound;
         public event EventHandler<string> FilteredFileFound;
         public event EventHandler<string> FilteredDirectoryFound;
-
+    
         private readonly string _rootDirectory;
         private readonly Func<FileSystemInfo, bool> _filter;
 
@@ -72,7 +72,7 @@ namespace FileSystemTask
                     DirectoryFound?.Invoke(this, subdirectory.Name);
                     if (_filter != null && !_filter(subdirectory))
                     {
-                        //Event: Fil
+                        //Event: Filtered file found
                         FilteredFileFound?.Invoke(this, subdirectory.Name);
                         continue;
                     }
