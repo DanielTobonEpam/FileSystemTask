@@ -8,7 +8,7 @@ namespace FileSystemTask
 {
     public interface IFilesystemVisitor
     {
-        string RootDirectory { get; set; }
+        string GetRootDirectory();
         IEnumerable<FileSystemInfo> Traverse();
     }
 }

@@ -14,12 +14,12 @@ namespace FileSystemTask
         public event EventHandler<string> DirectoryFound;
         public event EventHandler<string> FilteredFileFound;
         public event EventHandler<string> FilteredDirectoryFound;
-    
+
         private readonly string _rootDirectory;
         private readonly Func<FileSystemInfo, bool> _filter;
 
-            private bool abortSearch;
-    private bool excludeItems;
+        private bool abortSearch;
+        string IFilesystemVisitor.GetRootDirectory() { return _rootDirectory; }
 
         public FileSystemVisitor(string rootDirectory)
         {
@@ -35,19 +35,17 @@ namespace FileSystemTask
             _filter = filter;
         }
 
-        public string RootDirectory { get; set; }
-
         public IEnumerable<FileSystemInfo> Traverse()
         {
             if (abortSearch)
             {
                 //Event: Finish
-                Finish?.Invoke(this, RootDirectory);
+                Finish?.Invoke(this, _rootDirectory);
                 yield break;
             }
 
             var queue = new Queue<DirectoryInfo>();
-            queue.Enqueue(new DirectoryInfo(RootDirectory));
+            queue.Enqueue(new DirectoryInfo(_rootDirectory));
 
             while (queue.Count > 0)
             {
@@ -58,28 +56,25 @@ namespace FileSystemTask
                     //Event: Filefound
                     FileFound?.Invoke(this, file.Name);
 
-                    if (_filter != null && !_filter(file))
+                    if (_filter is null || _filter(file))
                     {
-                        continue;
+                        yield return file;
                     }
-
-                    yield return file;
                 }
 
                 foreach (var subdirectory in directory.GetDirectories())
                 {
                     //Event: Directory found
                     DirectoryFound?.Invoke(this, subdirectory.Name);
-                    if (_filter != null && !_filter(subdirectory))
+
+                    if (_filter is null || _filter(subdirectory))
                     {
-                        //Event: Filtered file found
-                        FilteredFileFound?.Invoke(this, subdirectory.Name);
-                        continue;
+                        yield return subdirectory;
+                        queue.Enqueue(subdirectory);
                     }
 
-                    yield return subdirectory;
-
-                    queue.Enqueue(subdirectory);
+                    //Event: Filtered file found
+                    FilteredFileFound?.Invoke(this, subdirectory.Name);
                 }
             }
         }

@@ -7,11 +7,9 @@ internal class Program
     {
         var container = new Container();
 
-        container.Register<IFilesystemVisitor>(() => new FileSystemVisitor(""));
+        container.Register<IFilesystemVisitor>(() => new FileSystemVisitor(args[0]));
 
         var fileSystemVisitor = container.GetInstance<IFilesystemVisitor>();
-
-        fileSystemVisitor.RootDirectory = args[0];
 
         //The next code is only to test the events... need to correct later
         var visitor = new FileSystemVisitor(args[0]);
