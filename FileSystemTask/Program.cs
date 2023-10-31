@@ -11,7 +11,6 @@ internal class Program
 
         var fileSystemVisitor = container.GetInstance<IFilesystemVisitor>();
 
-        //The next code is only to test the events... need to correct later
         var visitor = new FileSystemVisitor(args[0]);
         //Events
         visitor.Start += (sender, path) => Console.WriteLine($"Started searching at: {path}");
