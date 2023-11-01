@@ -69,12 +69,13 @@ namespace FileSystemTask
 
                     if (_filter is null || _filter(subdirectory))
                     {
+
+                        //Event: Filtered file found
+                        FilteredFileFound?.Invoke(this, subdirectory.Name);
+
                         yield return subdirectory;
                         queue.Enqueue(subdirectory);
                     }
-
-                    //Event: Filtered file found
-                    FilteredFileFound?.Invoke(this, subdirectory.Name);
                 }
             }
         }
